@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini CLI コマンド一覧</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #24292f;
+            background-color: #ffffff;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #d1d9e0;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 32px 0 16px 0;
+            color: #1f2328;
+        }
+
+        .command-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 24px;
+            background: #ffffff;
+            border: 1px solid #d1d9e0;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .command-table th {
+            background-color: #f6f8fa;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 1px solid #d1d9e0;
+            font-size: 14px;
+        }
+
+        .command-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #d1d9e0;
+            vertical-align: top;
+            font-size: 14px;
+        }
+
+        .command-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .command-table tr:hover {
+            background-color: #f6f8fa;
+        }
+
+        .command-cell {
+            position: relative;
+        }
+
+        .command-code {
+            background-color: #f6f8fa;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            font-size: 13px;
+            border: 1px solid #d1d9e0;
+            display: inline-block;
+            margin: 2px 0;
+        }
+
+        .copy-btn {
+            background: #21262d;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            margin-left: 8px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .command-cell:hover .copy-btn {
+            opacity: 1;
+        }
+
+        .copy-btn:hover {
+            background: #30363d;
+        }
+
+        .copy-btn:active {
+            background: #21262d;
+        }
+
+        .copied {
+            background: #1f883d !important;
+        }
+
+        .description {
+            color: #656d76;
+        }
+
+        .usage {
+            color: #8250df;
+            font-weight: 500;
+        }
+
+        .tips {
+            background: #dbeafe;
+            border: 1px solid #3b82f6;
+            border-radius: 6px;
+            padding: 16px;
+            margin: 24px 0;
+        }
+
+        .tips h3 {
+            color: #1e40af;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .tips p {
+            color: #1e3a8a;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .command-table {
+                font-size: 12px;
+            }
+            
+            .command-table th,
+            .command-table td {
+                padding: 8px 12px;
+            }
+
+            .copy-btn {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📋 Gemini CLI コマンド一覧</h1>
+        
+        <div class="tips">
+            <h3>💡 使い方のコツ</h3>
+            <p>各コマンドの右側にある「Copy」ボタンをクリックしてクリップボードにコピーできます。ターミナルに貼り付けてそのまま実行してください。</p>
+        </div>
+
+        <table class="command-table">
+            <thead>
+                <tr>
+                    <th>種別</th>
+                    <th>コマンド・フラグ</th>
+                    <th>説明</th>
+                    <th>主な用途</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>基本</strong></td>
+                    <td class="command-cell">
+                        <code class="command-code">/help</code>
+                        <button class="copy-btn" onclick="copyCommand('/help')">Copy</button>
+                    </td>
+                    <td class="description">すべてのコマンドとショートカットを一覧表示</td>
+                    <td class="usage">迷った時の"コマンド辞書"</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="command-cell">
+                        <code class="command-code">/clear</code>
+                        <button class="copy-btn" onclick="copyCommand('/clear')">Copy</button>
+                    </td>
+                    <td class="description">画面と履歴を一括クリア（Ctrl+L 同等）</td>
+                    <td class="usage">画面をリセットして見やすく</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="command-cell">
+                        <code class="command-code">/quit</code>
+                        <button class="copy-btn" onclick="copyCommand('/quit')">Copy</button>
+                    </td>
+                    <td class="description">セッションを終了</td>
+                    <td class="usage">GeminiCLI を安全に閉じる</td>
+                </tr>
+                <tr>
+                    <td><strong>外観</strong></td>
+                    <td class="command-cell">
+                        <code class="command-code">/theme</code>
+                        <button class="copy-btn" onclick="copyCommand('/theme')">Copy</button>
+                    </td>
+                    <td class="description">ダーク／ライトなど見た目を変更</td>
+                    <td class="usage">長時間作業の目の負担軽減</td>
+                </tr>
+                <tr>
+                    <td><strong>認証</strong></td>
+                    <td class="command-cell">
+                        <code class="command-code">/auth</code>
+                        <button class="copy-btn" onclick="copyCommand('/auth')">Copy</button>
+                    </td>
+                    <td class="description">OAuth ↔ APIキーを切替</td>
+                    <td class="usage">個人・組織アカウントの使い分け</td>
+                </tr>
+                <tr>
+                    <td><strong>編集</strong></td>
+                    <td class="command-cell">
+                        <code class="command-code">/editor</code>
+                        <button class="copy-btn" onclick="copyCommand('/editor')">Copy</button>
+                    </td>
+                    <td class="description">外部エディタを選択・設定</td>
+                    <td class="usage">vim や code へ即ジャンプ</td>
+                </tr>
+                <tr>
+                    <td><strong>統計</strong></td>
+                    <td class="command-cell">
+                        <code class="command-code">/stats</code>
+                        <button class="copy-btn" onclick="copyCommand('/stats')">Copy</button>
+                    </td>
+                    <td class="description">トークン使用量や経過時間を表示</td>
+                    <td class="usage">API費用・利用状況のチェック</td>
+                </tr>
+                <tr>
+                    <td><strong>情報</strong></td>
+                    <td class="command-cell">
+                        <code class="command-code">/about</code>
+                        <button class="copy-btn" onclick="copyCommand('/about')">Copy</button>
+                    </td>
+                    <td class="description">CLI とモデルのバージョンを表示</td>
+                    <td class="usage">バグ報告や再現手順に便利</td>
+                </tr>
+                <tr>
+                    <td><strong>バグ報告</strong></td>
+                    <td class="command-cell">
+                        <code class="command-code">/bug</code>
+                        <button class="copy-btn" onclick="copyCommand('/bug')">Copy</button>
+                    </td>
+                    <td class="description">GitHub Issue を半自動生成</td>
+                    <td class="usage">不具合をすぐ開発元へ共有</td>
+                </tr>
+                <tr>
+                    <td><strong>ドキュメント</strong></td>
+                    <td class="command-cell">
+                        <code class="command-code">/docs</code>
+                        <button class="copy-btn" onclick="copyCommand('/docs')">Copy</button>
+                    </td>
+                    <td class="description">公式ドキュメントをブラウザで開く</td>
+                    <td class="usage">詳細仕様を即参照</td>
+                </tr>
+                <tr>
+                    <td><strong>会話管理</strong></td>
+                    <td class="command-cell">
+                        <code class="command-code">/chat save &lt;タグ&gt;</code>
+                        <button class="copy-btn" onclick="copyCommand('/chat save ')">Copy</button>
+                    </td>
+                    <td class="description">現在の会話をタグ付きで保存</td>
+                    <td class="usage">複数プロジェクトを並行管理</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="command-cell">
+                        <code class="command-code">/chat resume &lt;タグ&gt;</code>
+                        <button class="copy-btn" onclick="copyCommand('/chat resume ')">Copy</button>
+                    </td>
+                    <td class="description">保存した会話を復元</td>
+                    <td class="usage">作業を継続</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="command-cell">
+                        <code class="command-code">/chat list</code>
+                        <button class="copy-btn" onclick="copyCommand('/chat list')">Copy</button>
+                    </td>
+                    <td class="description">保存済みタグを一覧表示</td>
+                    <td class="usage">どの会話があるか確認</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="command-cell">
+                        <code class="command-code">/compress</code>
+                        <button class="copy-btn" onclick="copyCommand('/compress')">Copy</button>
+                    </td>
+                    <td class="description">会話全体を要約に置換しトークン節約</td>
+                    <td class="usage">長期セッションの軽量化</td>
+                </tr>
+                <tr>
+                    <td><strong>メモリ</strong></td>
+                    <td class="command-cell">
+                        <code class="command-code">/memory add &lt;テキスト&gt;</code>
+                        <button class="copy-btn" onclick="copyCommand('/memory add ')">Copy</button>
+                    </td>
+                    <td class="description">永続メモリ(GEMINI.md)へ追加</td>
+                    <td class="usage">プロジェクト固有ルールを記憶</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="command-cell">
+                        <code class="command-code">/memory show</code>
+                        <button class="copy-btn" onclick="copyCommand('/memory show')">Copy</button>
+                    </td>
+                    <td class="description">現在のメモリ内容を表示</td>
+                    <td class="usage">AI が何を覚えているか確認</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="command-cell">
+                        <code class="command-code">/memory refresh</code>
+                        <button class="copy-btn" onclick="copyCommand('/memory refresh')">Copy</button>
+                    </td>
+                    <td class="description">GEMINI.md を再読み込み</td>
+                    <td class="usage">外部編集後に内容を反映</td>
+                </tr>
+                <tr>
+                    <td><strong>ツール</strong></td>
+                    <td class="command-cell">
+                        <code class="command-code">/tools</code>
+                        <button class="copy-btn" onclick="copyCommand('/tools')">Copy</button>
+                    </td>
+                    <td class="description">利用可能ツール一覧と説明を表示</td>
+                    <td class="usage">どんな自動化が可能か把握</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="command-cell">
+                        <code class="command-code">/mcp</code>
+                        <button class="copy-btn" onclick="copyCommand('/mcp')">Copy</button>
+                    </td>
+                    <td class="description">MCP サーバー状態とツール一覧</td>
+                    <td class="usage">自社ホストツールとの連携確認</td>
+                </tr>
+                <tr>
+                    <td><strong>復元</strong></td>
+                    <td class="command-cell">
+                        <code class="command-code">/restore [ID]</code>
+                        <button class="copy-btn" onclick="copyCommand('/restore ')">Copy</button>
+                    </td>
+                    <td class="description">ツール実行前の状態にロールバック</td>
+                    <td class="usage">誤編集・誤削除の安全網</td>
+                </tr>
+                <tr>
+                    <td><strong>ファイル挿入</strong></td>
+                    <td class="command-cell">
+                        <code class="command-code">@&lt;パス&gt;</code>
+                        <button class="copy-btn" onclick="copyCommand('@')">Copy</button>
+                    </td>
+                    <td class="description">指定ファイル/ディレクトリを読ませる</td>
+                    <td class="usage">コードレビュー・仕様読込み</td>
+                </tr>
+                <tr>
+                    <td><strong>シェル実行</strong></td>
+                    <td class="command-cell">
+                        <code class="command-code">!&lt;コマンド&gt;</code>
+                        <button class="copy-btn" onclick="copyCommand('!')">Copy</button>
+                    </td>
+                    <td class="description">シェルコマンドをその場で実行</td>
+                    <td class="usage">画像変換や git 操作を自動化</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>🚀 起動フラグ</h2>
+        <table class="command-table">
+            <thead>
+                <tr>
+                    <th>フラグ</th>
+                    <th>説明</th>
+                    <th>使用例</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="command-cell">
+                        <code class="command-code">--prompt / -p</code>
+                        <button class="copy-btn" onclick="copyCommand('--prompt ')">Copy</button>
+                    </td>
+                    <td class="description">非対話モードで一発実行</td>
+                    <td class="usage">スクリプトやパイプライン組込</td>
+                </tr>
+                <tr>
+                    <td class="command-cell">
+                        <code class="command-code">--all-files / -a</code>
+                        <button class="copy-btn" onclick="copyCommand('--all-files')">Copy</button>
+                    </td>
+                    <td class="description">カレント以下の全ファイルを読込み</td>
+                    <td class="usage">大規模リポジトリの要約</td>
+                </tr>
+                <tr>
+                    <td class="command-cell">
+                        <code class="command-code">--sandbox / -s</code>
+                        <button class="copy-btn" onclick="copyCommand('--sandbox')">Copy</button>
+                    </td>
+                    <td class="description">Docker サンドボックス内で安全実行</td>
+                    <td class="usage">破壊的コマンドの隔離</td>
+                </tr>
+                <tr>
+                    <td class="command-cell">
+                        <code class="command-code">--yolo</code>
+                        <button class="copy-btn" onclick="copyCommand('--yolo')">Copy</button>
+                    </td>
+                    <td class="description">すべて自動承認（確認ダイアログ無効）</td>
+                    <td class="usage">非対話バッチ処理を高速化</td>
+                </tr>
+                <tr>
+                    <td class="command-cell">
+                        <code class="command-code">--model &lt;名前&gt;</code>
+                        <button class="copy-btn" onclick="copyCommand('--model ')">Copy</button>
+                    </td>
+                    <td class="description">使用モデルを選択（例：flash）</td>
+                    <td class="usage">速度・精度を状況で切替</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="tips">
+            <h3>🎯 覚えるべき３つのプレフィックス</h3>
+            <p><strong>/</strong> … CLI の動作や会話をコントロール（メタ命令）<br>
+            <strong>@</strong> … ファイル・ディレクトリを Gemini に読み込ませる<br>
+            <strong>!</strong> … ローカルシェルを AI 経由で実行</p>
+        </div>
+        <p><a href="index.html">インストールガイドに戻る</a></p>
+    </div>
+
+    <script>
+        function copyCommand(command) {
+            navigator.clipboard.writeText(command).then(function() {
+                // コピー成功の視覚的フィードバック
+                event.target.textContent = 'Copied!';
+                event.target.classList.add('copied');
+                
+                setTimeout(function() {
+                    event.target.textContent = 'Copy';
+                    event.target.classList.remove('copied');
+                }, 2000);
+            }).catch(function(err) {
+                console.error('コピーに失敗しました: ', err);
+                alert('コピーに失敗しました。手動でコピーしてください。');
+            });
+        }
+    </script>
+</body>
+</html>
