@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini CLI インストールガイド</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Gemini CLI インストールガイド</h1>
+        <p>Windows環境向けのインストール手順を分かりやすく解説します。</p>
+    </header>
+
+    <main>
+        <section id="overview">
+            <h2>インストール全体像</h2>
+            <ol>
+                <li>Node.js v20 以上を用意</li>
+                <li>PowerShell の実行ポリシーを変更</li>
+                <li>Gemini CLI をインストール（お試し or 常用）</li>
+                <li>初回起動でテーマ選択・Google 認証</li>
+                <li>次回からは `gemini` を実行するだけ</li>
+            </ol>
+        </section>
+
+        <section id="nodejs">
+            <h2>1. Node.js を用意する</h2>
+            <p>Gemini CLI は Node.js 18 以上を前提としますが、依存パッケージが v20 を要求するため <strong>v20 以上</strong> を推奨します。</p>
+            <p><a href="https://nodejs.org/" target="_blank" rel="noopener noreferrer">Node.js公式サイト</a>からインストーラーをダウンロードするのが最も簡単です。</p>
+            <div class="tabs">
+                <button class="tab-link active" onclick="openTab(event, 'installer')">公式インストーラー</button>
+                <button class="tab-link" onclick="openTab(event, 'nvm')">nvm-windows</button>
+            </div>
+            <div id="installer" class="tab-content" style="display: block;">
+                <h3>公式インストーラーで一発更新（手軽）</h3>
+                <p>公式サイトにアクセスし、推奨されているLTS (Long Term Support)版のインストーラーをダウンロードして実行してください。特に設定を変更する必要はなく、指示に従って進めるだけでインストールが完了します。</p>
+                <pre><code># インストール後にバージョンを確認
+node -v</code></pre>
+            </div>
+            <div id="nvm" class="tab-content">
+                <h3>nvm-windows でバージョン管理（複数併用）</h3>
+                <pre><code>nvm install 22.17.0
+nvm use 22.17.0
+nvm current      # v22.17.0</code></pre>
+                <p>nvm-windows を使うとプロジェクトごとに Node.js を切り替えられます。</p>
+            </div>
+        </section>
+
+        <section id="powershell">
+            <h2>2. PowerShell 実行ポリシーを緩和する</h2>
+            <p>初期状態は `Restricted` なので、ローカルスクリプトが実行できる <strong>RemoteSigned</strong> に変更します。</p>
+            <pre><code># 現在ユーザに永続設定（推奨）
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
+# 確認
+Get-ExecutionPolicy      # RemoteSigned と表示されれば OK</code></pre>
+            <p>※ 一時的に済ませたい場合は `-Scope Process` を使うとセッション終了で元に戻ります。</p>
+        </section>
+
+        <section id="install-cli">
+            <h2>3. Gemini CLI のインストール</h2>
+            <div class="tabs">
+                <button class="tab-link active" onclick="openTab(event, 'npx')">まずはお試し</button>
+                <button class="tab-link" onclick="openTab(event, 'npm')">常用する</button>
+            </div>
+            <div id="npx" class="tab-content" style="display: block;">
+                <h3>3-1. まずは触ってみる（npx 実行）</h3>
+                <pre><code>npx https://github.com/google-gemini/gemini-cli</code></pre>
+                <p>WSL なしでも PowerShell だけで即起動できます。</p>
+            </div>
+            <div id="npm" class="tab-content">
+                <h3>3-2. 常用する（npm グローバル）</h3>
+                <pre><code>npm install -g @google/gemini-cli</code></pre>
+                <p>二回目以降は `gemini` だけで起動できます。<br>コマンドが見つからない場合は `npm bin -g` で表示されるフォルダを <strong>Path</strong> に追加します。</p>
+            </div>
+        </section>
+
+        <section id="first-boot">
+            <h2>4. 初回起動とセットアップ</h2>
+            <pre><code>gemini</code></pre>
+            <ol>
+                <li>テーマを矢印キーで選んで Enter</li>
+                <li>「Sign in with Google」を選択</li>
+                <li>ブラウザでログイン → 表示されたコードをターミナルに貼付</li>
+                <li>`gemini >` プロンプトが出れば準備完了</li>
+            </ol>
+        </section>
+
+        <section id="basic-usage">
+            <h2>5. 基本操作</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>操作</th>
+                        <th>コマンド例</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>対話モード開始</td>
+                        <td>`gemini`</td>
+                    </tr>
+                    <tr>
+                        <td>単発質問</td>
+                        <td>`gemini -p "React19の新機能を３行で"`</td>
+                    </tr>
+                    <tr>
+                        <td>終了</td>
+                        <td>`/quit` または `/exit`</td>
+                    </tr>
+                    <tr>
+                        <td>次回起動</td>
+                        <td>PowerShell でも cmd でも `gemini`</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>Gemini は起動ディレクトリのファイルを自動解析します。プロジェクト内で起動するとコードレビューや構造把握に便利です。</p>
+        </section>
+
+        <section id="troubleshooting">
+            <h2>6. よくあるトラブル</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>症状</th>
+                        <th>対処</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>`EBADENGINE` 警告</td>
+                        <td>Node.js を v20 以上へ更新</td>
+                    </tr>
+                    <tr>
+                        <td>`gemini はスクリプトの実行が無効`</td>
+                        <td>`Set-ExecutionPolicy RemoteSigned` を実行</td>
+                    </tr>
+                    <tr>
+                        <td>コマンド未検出</td>
+                        <td>`npm bin -g` のパスを環境変数 `Path` に追加</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Gemini CLI Install Guide</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
